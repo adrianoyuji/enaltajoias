@@ -1,6 +1,7 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useToast } from "@chakra-ui/react";
+import api from "utils/api";
 
 interface UserContextData {
   user: User | null;
@@ -8,6 +9,7 @@ interface UserContextData {
   loading: boolean;
   login({ email, password }: LoginCredentials): Promise<void>;
   signout(): Promise<void>;
+  loadingStorage: boolean;
 }
 
 enum Role {
@@ -45,17 +47,52 @@ const AuthContext = createContext<UserContextData>({} as UserContextData);
 export const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingStorage, setLoadingStorage] = useState<boolean>(true);
   const router = useRouter();
   const toast = useToast();
 
-  const login = async ({ email, password }: LoginCredentials) => {
-    console.log(email, password);
+  useEffect(() => {
+    getUserSession();
+  }, []);
+
+  const getUserSession = () => {
+    const localUser = localStorage.getItem("@EnaltaJoias:user");
+    if (localUser) {
+      setUser(JSON.parse(localUser));
+      router.replace("/painel");
+    }
+    setLoadingStorage(false);
   };
-  const signout = async () => {};
+
+  const login = async ({ email, password }: LoginCredentials) => {
+    setLoading(true);
+    try {
+      const response = await api.post(`/api/auth`, { email, password });
+      setUser(response.data.user);
+      localStorage.setItem(
+        "@EnaltaJoias:user",
+        JSON.stringify(response.data.user)
+      );
+      toast({
+        title: "Entrou com sucesso",
+        description: "Bem vindo ao Software Bistrô.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      router.replace("/painel");
+    } catch (error) {}
+    setLoading(false);
+  };
+  const signout = async () => {
+    localStorage.removeItem("@EnaltaJoias:user");
+    setUser(null);
+    router.replace("/");
+  };
 
   return (
     <AuthContext.Provider
-      value={{ user, signed: !!user, loading, login, signout }}
+      value={{ user, signed: !!user, loading, login, signout, loadingStorage }}
     >
       {children}
     </AuthContext.Provider>

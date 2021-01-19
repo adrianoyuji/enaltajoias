@@ -39,23 +39,24 @@ const updateJewel = async (
   if (!jewel) {
     throw new Object({ statusCode: 404, message: "Código da jóia invalido." });
   }
-
   const { error, value } = updateJewelSchema.validate(request.body);
   if (error) {
-    throw new Object({ statusCode: 400, message: error });
+    throw new Object({ statusCode: 400, message: error.details[0].message });
   }
 
-  let validValues = {};
-
-  for (const key in value) {
-    if (value[key]) {
-      validValues = { ...validValues, [key]: value[key] };
-    }
+  const jewelExists = await db
+    .collection("jewels")
+    .findOne({ name: value.name });
+  if (!!jewelExists) {
+    throw new Object({
+      statusCode: 401,
+      message: "Nome já utilizado",
+    });
   }
 
   const responseJewel = await db
     .collection("jewels")
-    .updateOne({ jewelId: id }, { $set: { ...validValues } });
+    .updateOne({ jewelId: Number(id) }, { $set: { ...value } });
 
   response
     .status(201)
@@ -76,7 +77,7 @@ const deleteJewel = async (
 
   const responseJewel = await db
     .collection("jewels")
-    .updateOne({ jewelId: id });
+    .deleteOne({ jewelId: Number(id) });
 
   response
     .status(201)

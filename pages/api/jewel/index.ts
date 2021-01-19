@@ -42,7 +42,7 @@ const getJewels = async (
     filters = { ...filters, name: name };
   }
   if (jewelId) {
-    filters = { ...filters, jewelId: jewelId };
+    filters = { ...filters, jewelId: Number(jewelId) };
   }
 
   const pagination = 10;
@@ -53,9 +53,8 @@ const getJewels = async (
     .skip(pagination * page)
     .toArray();
 
-  response.status(200).json({ statusCode: 200, data: { jewels } });
+  response.status(200).json({ statusCode: 200, jewels });
 };
-
 const createJewels = async (
   request: NextApiRequest,
   response: NextApiResponse
@@ -63,7 +62,7 @@ const createJewels = async (
   const { db } = await connectToDatabase();
   const { error, value } = createJewelSchema.validate(request.body);
   if (error) {
-    throw new Object({ statusCode: 400, message: error });
+    throw new Object({ statusCode: 400, message: error.details[0].message });
   }
   const { name, price, type, line } = value;
 

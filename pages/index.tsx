@@ -7,6 +7,7 @@ import {
   Button,
   Flex,
   Heading,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { useAuth } from "hooks/auth";
@@ -14,7 +15,7 @@ import { useAuth } from "hooks/auth";
 const IndexPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading } = useAuth();
+  const { login, loading, loadingStorage } = useAuth();
   const toast = useToast();
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -55,32 +56,42 @@ const IndexPage = () => {
             flexDirection="column"
             height="100%"
           >
-            <form onSubmit={handleSubmit}>
-              <Stack spacing={4}>
-                <Heading size="lg" textAlign="center">
-                  Enalta Jóias 💎
-                </Heading>
-                <Input
-                  id="email"
-                  placeholder="Email"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Input
-                  placeholder="Senha"
-                  type="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Stack>
-              <Button
-                colorScheme="blue"
-                type="submit"
-                width="100%"
-                marginTop="4"
-                isLoading={loading}
-              >
-                Entrar
-              </Button>
-            </form>
+            {loadingStorage ? (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <Stack spacing={4}>
+                  <Heading size="lg" textAlign="center">
+                    Enalta Jóias 💎
+                  </Heading>
+                  <Input
+                    id="email"
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Senha"
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Stack>
+                <Button
+                  colorScheme="blue"
+                  type="submit"
+                  width="100%"
+                  marginTop="4"
+                  isLoading={loading}
+                >
+                  Entrar
+                </Button>
+              </form>
+            )}
           </Flex>
         </Box>
       </Flex>

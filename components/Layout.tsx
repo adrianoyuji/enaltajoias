@@ -23,7 +23,7 @@ const Layout = ({ children, title }: Props) => {
       bgGradient="linear(to-b,#AA771C,#FCF6BA,#AA771C)"
     >
       <Head>
-        <link rel="shortcut icon" sizes="48x48" href="/favicon.png" />
+        <link rel="shortcut icon" sizes="48x48" href="/favicon.jpg" />
         <title>{title}</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />

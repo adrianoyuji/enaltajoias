@@ -34,24 +34,32 @@ const login = async (request: NextApiRequest, response: NextApiResponse) => {
     throw new Object({ statusCode: 400, message: "Insira email e/ou senha" });
   }
   //validate body request
-  const { error } = validateLogin.validate(request.body);
+  const { error, value } = validateLogin.validate(request.body);
   if (!!error) {
     throw new Object({ statusCode: 400, message: error.details[0].message });
   }
 
   //check if email exists
-  const user = await db
-    .collection("users")
-    .findOne({ email: request.body.email });
+  const user = await db.collection("users").findOne({ email: value.email });
   if (!user) {
     throw new Object({ statusCode: 400, message: "Email/Senha incorretos" });
   }
 
   //checks if password is correct
-  const validPwd = await bcrypt.compare(request.body.pwd, user.pwd);
+  const validPwd = await bcrypt.compare(value.password, user.password);
   if (!validPwd) {
     response.status(400).json({ error: "Email/Senha incorretos" });
   } else {
-    response.status(200).json({ user: user });
+    response.status(200).json({
+      user: {
+        briefcases: user.briefcases,
+        city: user.city,
+        createdAt: user.createdAt,
+        email: user.email,
+        full_name: user.full_name,
+        phone_number: user.phone_number,
+        _id: user._id,
+      },
+    });
   }
 };

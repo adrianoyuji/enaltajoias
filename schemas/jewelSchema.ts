@@ -7,7 +7,6 @@ const createJewelSchema = Joi.object({
   line: Joi.string().required(),
 });
 const updateJewelSchema = Joi.object({
-  id: Joi.number().required(),
   name: Joi.string(),
   price: Joi.number(),
   type: Joi.string(),
