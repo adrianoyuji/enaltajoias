@@ -44,16 +44,17 @@ const updateJewel = async (
     throw new Object({ statusCode: 400, message: error.details[0].message });
   }
 
-  const jewelExists = await db
-    .collection("jewels")
-    .findOne({ name: value.name });
-  if (!!jewelExists) {
-    throw new Object({
-      statusCode: 401,
-      message: "Nome já utilizado",
-    });
+  if (jewel.name !== value.name) {
+    const jewelExists = await db
+      .collection("jewels")
+      .findOne({ name: value.name });
+    if (!!jewelExists) {
+      throw new Object({
+        statusCode: 401,
+        message: "Nome já utilizado",
+      });
+    }
   }
-
   const responseJewel = await db
     .collection("jewels")
     .updateOne({ jewelId: Number(id) }, { $set: { ...value } });

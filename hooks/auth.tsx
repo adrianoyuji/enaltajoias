@@ -75,7 +75,7 @@ export const AuthProvider: React.FC = ({ children }) => {
       );
       toast({
         title: "Entrou com sucesso",
-        description: "Bem vindo ao Software Bistrô.",
+        description: "Bem vindo ao Enalta Jóias.",
         status: "success",
         duration: 3000,
         isClosable: true,
