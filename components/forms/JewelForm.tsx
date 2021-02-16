@@ -13,6 +13,7 @@ import {
   FormHelperText,
   Button,
   useToast,
+  Select,
   SimpleGrid,
 } from "@chakra-ui/react";
 interface Props {
@@ -21,6 +22,8 @@ interface Props {
   refresh(): void;
 }
 import api from "utils/api";
+import lines from "utils/jewels/lines";
+import types from "utils/jewels/types";
 
 interface Jewel {
   jewelId: number;
@@ -186,19 +189,31 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
           </FormControl>
           <FormControl id="linha" isRequired>
             <FormLabel>Linha</FormLabel>
-            <Input
-              autoComplete="off"
+            <Select
+              placeholder="Selecione uma linha"
               value={line}
               onChange={(e) => setLine(e.target.value)}
-            />
+            >
+              {lines.map((line_option) => (
+                <option key={line_option.value} value={line_option.value}>
+                  {line_option.title}
+                </option>
+              ))}
+            </Select>
           </FormControl>
           <FormControl id="type" isRequired>
             <FormLabel>Tipo</FormLabel>
-            <Input
-              autoComplete="off"
+            <Select
+              placeholder="Selecione um tipo"
               value={type}
               onChange={(e) => setType(e.target.value)}
-            />
+            >
+              {types.map((type_option) => (
+                <option key={type_option.value} value={type_option.value}>
+                  {type_option.title}
+                </option>
+              ))}
+            </Select>
           </FormControl>
           <FormControl id="price" isRequired>
             <FormLabel>Preço (R$)</FormLabel>
