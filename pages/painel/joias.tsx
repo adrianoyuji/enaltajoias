@@ -210,7 +210,7 @@ const Joias = () => {
                     colorScheme="yellow"
                     size="sm"
                     aria-label="prev page"
-                    disabled={pagination <= 1}
+                    disabled={pagination + 1 <= 1}
                     icon={<BsChevronLeft />}
                   />
                   <Spacer />
@@ -221,7 +221,7 @@ const Joias = () => {
                     colorScheme="yellow"
                     size="sm"
                     aria-label="next page"
-                    disabled={jewels.length < 10 ? true : false}
+                    disabled={jewels.length < 9 ? true : false}
                     icon={<BsChevronRight />}
                   />
                 </Flex>
