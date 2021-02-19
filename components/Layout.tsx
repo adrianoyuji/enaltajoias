@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 import Head from "next/head";
 import { Flex } from "@chakra-ui/react";
 import Footer from "components/Footer";
@@ -8,17 +8,12 @@ interface Props {
 }
 
 const Layout = ({ children, title }: Props) => {
-  const [innerHeight, setInnerHeight] = useState("100vh");
-  useEffect(() => {
-    setInnerHeight(`${window.innerHeight}px`);
-  }, []);
-
   return (
     <Flex
       direction="column"
       bg="gray.50"
       color="black"
-      height={innerHeight}
+      height="100vh"
       width="100vw"
       bgGradient="linear(to-b,#AA771C,#FCF6BA,#AA771C)"
     >

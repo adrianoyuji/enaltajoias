@@ -4,6 +4,7 @@ export interface Jewel extends Document {
   id: string;
   name: string;
   price: number;
+  purchase_price: number;
 }
 
 export interface IBriefcase extends Document {

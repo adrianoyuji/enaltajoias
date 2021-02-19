@@ -64,7 +64,7 @@ const createJewels = async (
   if (error) {
     throw new Object({ statusCode: 400, message: error.details[0].message });
   }
-  const { name, price, type, line } = value;
+  const { name, price, type, line, purchase_price } = value;
 
   const jewelExists = await db.collection("jewels").findOne({ name: name });
   if (!!jewelExists) {
@@ -86,6 +86,7 @@ const createJewels = async (
     name: name,
     type: type,
     line: line,
+    purchase_price: purchase_price,
     price: Number(price),
     jewelId: Number(nextId) + 1,
   });

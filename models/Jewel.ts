@@ -5,6 +5,7 @@ export interface IJewel extends Document {
   name: string;
   line: string;
   type: string;
+  purchase_price: number;
   price: number;
 }
 
@@ -15,6 +16,7 @@ export const JewelSchema: Schema = new Schema(
     type: { type: String, required: true },
     line: { type: String, required: true },
     price: { type: Number, required: true },
+    purchase_price: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

@@ -2,7 +2,6 @@ import React, { useState, FormEvent } from "react";
 import {
   Flex,
   Input,
-  Stack,
   FormControl,
   FormLabel,
   NumberInput,
@@ -31,6 +30,7 @@ interface Jewel {
   line: string;
   type: string;
   price: number;
+  purchase_price: number;
 }
 
 const JewelForm = ({ value, onClose, refresh }: Props) => {
@@ -69,6 +69,14 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
       return "0";
     }
   });
+
+  const [purchasePrice, setPurchasePrice] = useState<string>(() => {
+    if (value?.purchase_price) {
+      return (value.purchase_price / 100).toFixed(2).toString();
+    } else {
+      return "0";
+    }
+  });
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
 
@@ -81,6 +89,7 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
         line,
         type,
         price: Number(price) * 100,
+        purchase_price: Number(purchasePrice) * 100,
       });
       refresh();
       onClose();
@@ -141,6 +150,7 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
           line,
           type,
           price: Number(price) * 100,
+          purchase_price: Number(purchasePrice) * 100,
         });
         refresh();
         onClose();
@@ -170,9 +180,9 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
   };
 
   return (
-    <Flex height="auto" flexDirection="column">
+    <Flex height="auto" flexDirection="column" py="4">
       <form onSubmit={handleSubmit}>
-        <Stack spacing={4}>
+        <SimpleGrid columns={2} spacing={4}>
           {jewelId && (
             <FormControl id="jewelId" isDisabled>
               <FormLabel>Código</FormLabel>
@@ -215,8 +225,29 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
               ))}
             </Select>
           </FormControl>
+
+          <FormControl id="purchase-price" isRequired>
+            <FormLabel>Preço de Atacado (R$)</FormLabel>
+            <NumberInput
+              defaultValue={0}
+              precision={2}
+              step={0.2}
+              min={0}
+              value={purchasePrice}
+              onChange={(value) => setPurchasePrice(value.replace(/^\R$/, ""))}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <FormHelperText>
+              Utilize "." para separar decimais ex: R$1.50
+            </FormHelperText>
+          </FormControl>
           <FormControl id="price" isRequired>
-            <FormLabel>Preço (R$)</FormLabel>
+            <FormLabel>Preço de Venda (R$)</FormLabel>
             <NumberInput
               defaultValue={0}
               precision={2}
@@ -235,7 +266,7 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
               Utilize "." para separar decimais ex: R$1.50
             </FormHelperText>
           </FormControl>
-        </Stack>
+        </SimpleGrid>
 
         {!!value || (
           <SimpleGrid columns={1} spacing={4} marginTop="4">

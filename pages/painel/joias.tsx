@@ -33,6 +33,7 @@ interface Jewel {
   line: string;
   type: string;
   price: number;
+  purchase_price: number;
 }
 interface Action {
   action: string;
@@ -97,7 +98,10 @@ const Joias = () => {
                 <Input
                   value={filter}
                   placeholder="Pesquisar por Código"
-                  onChange={(e) => setFilter(e.target.value.replace(/\D/g, ""))}
+                  onChange={(e) => {
+                    setFilter(e.target.value.replace(/\D/g, ""));
+                    setPagination(0);
+                  }}
                 />
                 {filter && (
                   <InputRightElement
@@ -148,7 +152,8 @@ const Joias = () => {
                   <Th>Nome</Th>
                   <Th>Linha</Th>
                   <Th>Tipo</Th>
-                  <Th isNumeric>Preço</Th>
+                  <Th isNumeric>Preço Atacado</Th>
+                  <Th isNumeric>Preço Venda</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -198,6 +203,18 @@ const Joias = () => {
                       cursor="pointer"
                       isNumeric
                     >
+                      {jewel.purchase_price
+                        ? `R$${(jewel.purchase_price / 100).toFixed(2)}`
+                        : "Não cadastrado"}
+                    </Td>
+                    <Td
+                      onClick={() => {
+                        setEditJewel({ ...jewel });
+                        setShowModal(true);
+                      }}
+                      cursor="pointer"
+                      isNumeric
+                    >
                       R${(jewel.price / 100).toFixed(2)}
                     </Td>
                   </Tr>
@@ -231,6 +248,7 @@ const Joias = () => {
         </Flex>
         <ModalForm
           title="Cadastrar Jóia"
+          size="3xl"
           isOpen={showModal}
           onClose={() => {
             setShowModal(false);
