@@ -23,8 +23,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import api from "utils/api";
-import lines from "utils/jewels/lines";
-import types from "utils/jewels/types";
+import { printJewelLine, printJewelType } from "utils/jewels";
 import { BiSearch, BiPlus, BiX } from "react-icons/bi";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 interface Jewel {
@@ -72,15 +71,6 @@ const Joias = () => {
       default:
         break;
     }
-  };
-
-  const printJewelLine = (name: string) => {
-    const line = lines.find((item) => item.value === name);
-    return line ? line.title : "Linha não encontrada";
-  };
-  const printJewelType = (name: string) => {
-    const type = types.find((item) => item.value === name);
-    return type ? type.title : "Tipo não encontrado";
   };
 
   return (

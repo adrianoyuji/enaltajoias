@@ -8,16 +8,18 @@ export interface Jewel extends Document {
 }
 
 export interface IBriefcase extends Document {
-  owner_id: string;
-  owner_name: string;
+  briefcase_name: string;
   jewels: Jewel[] | [];
+  jewel_quantity: number;
+  total_value: number;
 }
 
 export const BriefcaseSchema: Schema = new Schema(
   {
-    owner_id: { type: String, required: true },
-    owner_name: { type: String, required: true },
-    jewels: [],
+    briefcase_name: { type: String, required: true },
+    jewels: [{ jewelId: { type: String, required: true } }],
+    jewel_quantity: { type: Number },
+    total_value: { type: Number },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

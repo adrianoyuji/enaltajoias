@@ -20,6 +20,7 @@ interface Props {
   onClose(): void;
   refresh(): void;
 }
+import WarningDialog from "components/WarningDialog";
 import api from "utils/api";
 import lines from "utils/jewels/lines";
 import types from "utils/jewels/types";
@@ -78,6 +79,8 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
     }
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const toast = useToast();
 
   const handleSubmit = async (e: FormEvent) => {
@@ -280,7 +283,7 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
             <Button
               isLoading={loading}
               colorScheme="red"
-              onClick={() => handleDelete()}
+              onClick={() => setOpenDialog(!openDialog)}
             >
               Deletar
             </Button>
@@ -294,6 +297,14 @@ const JewelForm = ({ value, onClose, refresh }: Props) => {
           </SimpleGrid>
         )}
       </form>
+      <WarningDialog
+        header="Deletar Jóia?"
+        body="Tem certeza? Esta ação é irreversível."
+        confirmTitle="Deletar"
+        onConfirm={() => handleDelete()}
+        show={openDialog}
+        setShow={setOpenDialog}
+      />
     </Flex>
   );
 };
