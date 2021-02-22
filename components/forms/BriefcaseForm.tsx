@@ -89,9 +89,7 @@ const BriefcaseForm = ({ briefcaseId, onClose, refresh }: Props) => {
 
   const handleAddJewel = useCallback(
     (jewel) => {
-      if (!jewelList.some((item) => item.jewelId === jewel.jewelId)) {
-        setJewelList([...jewelList, { ...jewel }]);
-      }
+      setJewelList([...jewelList, { ...jewel }]);
     },
     [jewelList]
   );
