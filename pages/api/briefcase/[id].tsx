@@ -44,13 +44,15 @@ const getBriefcase = async (
   if (!briefcase) {
     throw new Object({ statusCode: 404, message: "Maleta inexistente." });
   }
-  let jewels: any = [];
-  for (const index in briefcase.jewels) {
-    const jewel = await db
-      .collection("jewels")
-      .findOne({ jewelId: Number(briefcase.jewels[index].jewelId) });
-    jewels = [...jewels, jewel];
-  }
+
+  const jewels = await await db
+    .collection("jewels")
+    .find({
+      jewelId: {
+        $in: briefcase.jewels.map((item: any) => Number(item.jewelId)),
+      },
+    })
+    .toArray();
 
   response
     .status(201)
